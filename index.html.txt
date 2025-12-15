@@ -1,0 +1,11 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>My Game Portal</title>
+</head>
+<body>
+  <h1>🎮 My Game Portal</h1>
+  <p>If you see this, your HTML file works.</p>
+</body>
+</html>
