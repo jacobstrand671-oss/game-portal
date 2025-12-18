@@ -1,148 +1,119 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
+<meta charset="UTF-8">
 <title>Game Channel</title>
 <style>
-  body {
-    margin: 0;
-    font-family: "Segoe UI", Arial, sans-serif;
-    background: radial-gradient(1200px 600px at 20% 0%, #3b0764, #0b0614);
-    color: #f5f3ff;
-  }
-  .container {
-    display: flex;
-    height: 100vh;
-    animation: appFade 0.6s ease-out both;
-  }
-  @keyframes appFade { from { opacity: 0; transform: translateY(6px);} to { opacity: 1; transform: translateY(0);} }
-
-  .sidebar {
-    width: 220px;
-    background: linear-gradient(180deg, #4c1d95, #2e1065);
-    display: flex;
-    flex-direction: column;
-    box-shadow: 8px 0 30px rgba(0,0,0,.35);
-  }
-  .side-btn {
-    padding: 16px 18px;
-    border: none;
-    background: transparent;
-    color: #e9d5ff;
-    text-align: left;
-    font-size: 16px;
-    cursor: pointer;
-    transition: background .25s ease, transform .15s ease, color .25s ease;
-  }
-  .side-btn:hover {
-    background: rgba(255,255,255,.08);
-    transform: translateX(4px);
-  }
-  .side-btn.active {
-    background: linear-gradient(90deg, rgba(255,255,255,.18), rgba(255,255,255,0));
-    color: #fff;
-  }
-
-  .content {
-    flex: 1;
-    padding: 34px;
-    overflow-y: auto;
-  }
-  .content.fade { animation: contentFade .35s ease-out both; }
-  @keyframes contentFade { from { opacity: 0; transform: translateY(8px);} to { opacity: 1; transform: translateY(0);} }
-
-  h1 {
-    margin-top: 0;
-    font-weight: 700;
-    letter-spacing: .3px;
-  }
-
-  .btn-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-    gap: 16px;
-    margin-top: 22px;
-  }
-  .action-btn {
-    padding: 16px;
-    background: linear-gradient(135deg, #7c3aed, #5b21b6);
-    border: none;
-    color: white;
-    font-size: 14px;
-    cursor: pointer;
-    border-radius: 14px;
-    box-shadow: 0 10px 25px rgba(124,58,237,.35);
-    transition: transform .15s ease, box-shadow .2s ease, filter .2s ease;
-  }
-  .action-btn:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 16px 35px rgba(124,58,237,.5);
-    filter: brightness(1.05);
-  }
+body {
+  margin: 0;
+  font-family: "Segoe UI", Arial, sans-serif;
+  background: radial-gradient(1200px 600px at 20% 0%, #3b0764, #0b0614);
+  color: #f5f3ff;
+}
+.container {
+  display: flex;
+  height: 100vh;
+  animation: fadeIn .5s ease-out;
+}
+@keyframes fadeIn {
+  from {opacity:0; transform:translateY(6px);}
+  to {opacity:1; transform:none;}
+}
+.sidebar {
+  width: 220px;
+  background: linear-gradient(180deg, #4c1d95, #2e1065);
+  display: flex;
+  flex-direction: column;
+  box-shadow: 8px 0 30px rgba(0,0,0,.35);
+}
+.side-btn {
+  padding: 16px;
+  border: none;
+  background: transparent;
+  color: #e9d5ff;
+  text-align: left;
+  font-size: 16px;
+  cursor: pointer;
+  transition: .2s;
+}
+.side-btn:hover {
+  background: rgba(255,255,255,.08);
+  transform: translateX(4px);
+}
+.side-btn.active {
+  background: rgba(255,255,255,.15);
+  color: white;
+}
+.content {
+  flex: 1;
+  padding: 32px;
+  animation: slide .3s ease-out;
+}
+@keyframes slide {
+  from {opacity:0; transform:translateY(10px);}
+  to {opacity:1; transform:none;}
+}
+.btn-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px,1fr));
+  gap: 16px;
+  margin-top: 20px;
+}
+.action-btn {
+  padding: 16px;
+  background: linear-gradient(135deg, #7c3aed, #5b21b6);
+  border: none;
+  color: white;
+  border-radius: 14px;
+  cursor: pointer;
+  box-shadow: 0 10px 25px rgba(124,58,237,.35);
+  transition: .2s;
+}
+.action-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 16px 35px rgba(124,58,237,.5);
+}
 </style>
 </head>
 <body>
 <div class="container">
   <div class="sidebar">
-    <button class="side-btn active" onclick="showPage('hub', this)">Hub</button>
-    <button class="side-btn" onclick="showPage('games', this)">Games</button>
-    <button class="side-btn" onclick="showPage('proxies', this)">Proxies</button>
-    <button class="side-btn" onclick="showPage('backup', this)">Backup</button>
-    <button class="side-btn" onclick="goEmergency()">Emergency</button>
+    <button class="side-btn active" onclick="show('hub',this)">Hub</button>
+    <button class="side-btn" onclick="show('games',this)">Games</button>
+    <button class="side-btn" onclick="show('proxies',this)">Proxies</button>
+    <button class="side-btn" onclick="show('backup',this)">Backup</button>
+    <button class="side-btn" onclick="emergency()">Emergency</button>
   </div>
   <div class="content" id="content"></div>
 </div>
-
 <script>
-  const pages = {
-    hub: `
-      <h1>Game Hub</h1>
-      <p>This game hub was made with dedication (or something like that).</p>
-      <p><b>Tip:</b> Pin this if you don't want to get caught out easily by right-clicking (or clicking with two fingers on a mousepad) and selecting <i>Pin</i>.</p>
-    `,
-    games: `
-      <h1>Enjoy</h1>
-      <div class="btn-grid">
-        <button class="action-btn">Out of Use</button>
-        <button class="action-btn">Out of Use</button>
-        <button class="action-btn">Out of Use</button>
-        <button class="action-btn">Out of Use</button>
-        <button class="action-btn">Out of Use</button>
-      </div>
-    `,
-    proxies: `
-      <h1>Proxies</h1>
-      <div class="btn-grid">
-        <button class="action-btn" onclick="location.href='https://example.com'">Out of Use</button>
-        <button class="action-btn" onclick="location.href='https://example.com'">Out of Use</button>
-        <button class="action-btn" onclick="location.href='https://example.com'">Out of Use</button>
-        <button class="action-btn" onclick="location.href='https://example.com'">Out of Use</button>
-        <button class="action-btn" onclick="location.href='https://example.com'">Out of Use</button>
-      </div>
-    `,
-    backup: `
-      <h1>Backup</h1>
-      <button class="action-btn" onclick="location.href='https://example.com'">Backup</button>
-    `
-  };
-
-  function showPage(page, btn) {
-    const content = document.getElementById('content');
-    content.classList.remove('fade');
-    void content.offsetWidth; // restart animation
-    content.innerHTML = pages[page];
-    content.classList.add('fade');
-
-    document.querySelectorAll('.side-btn').forEach(b => b.classList.remove('active'));
-    btn.classList.add('active');
-  }
-
-  function goEmergency() {
-    window.location.href = 'https://classroom.google.com';
-  }
-
-  // default page
-  document.getElementById('content').innerHTML = pages.hub;
+const pages = {
+  hub: `<h1>Game Hub</h1><p>This game hub was made with dedication (or something like that).</p><p><b>Tip:</b> Pin this if you don't want to get caught out easily by right‑clicking (or two‑finger clicking) and selecting <i>Pin</i>.</p>`,
+  games: `<h1>Enjoy</h1><div class="btn-grid">
+    <button class="action-btn" onclick="location.href='https://whitespider.gq/'">Nettleweb</button>
+    <button class="action-btn" onclick="location.href='https://example.com'">Out of Use</button>
+    <button class="action-btn" onclick="location.href='https://example.com'">Out of Use</button>
+    <button class="action-btn" onclick="location.href='https://example.com'">Out of Use</button>
+    <button class="action-btn" onclick="location.href='https://example.com'">Out of Use</button>
+  </div>`,
+  proxies: `<h1>Proxies</h1><div class="btn-grid">
+    <button class="action-btn" onclick="location.href='https://bank.primeflk.ch'">Axiom Proxy 1</button>
+    <button class="action-btn" onclick="location.href='https://example.com'">Out of Use</button>
+    <button class="action-btn" onclick="location.href='https://example.com'">Out of Use</button>
+    <button class="action-btn" onclick="location.href='https://example.com'">Out of Use</button>
+    <button class="action-btn" onclick="location.href='https://example.com'">Out of Use</button>
+  </div>`,
+  backup: `<h1>Backup</h1><button class="action-btn" onclick="location.href='https://example.com'">Backup</button>`
+};
+function show(page, btn){
+  document.getElementById('content').innerHTML = pages[page];
+  document.querySelectorAll('.side-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+}
+function emergency(){
+  window.location.href='https://classroom.google.com';
+}
+document.getElementById('content').innerHTML = pages.hub;
 </script>
 </body>
 </html>
